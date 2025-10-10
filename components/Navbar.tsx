@@ -43,7 +43,7 @@ export default function NavBar() {
           {/* 로그아웃 버튼을 이미지로 */}
           <button onClick={logout}>
             <Image
-              src="/images/logo_04.png"  // 🔹 로그아웃 버튼 이미지 파일
+              src="/images/Leave_button.png"  // 🔹 로그아웃 버튼 이미지 파일
               alt="로그아웃 버튼"
               width={160}
               height={40}
