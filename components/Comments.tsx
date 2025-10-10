@@ -114,11 +114,11 @@ export default function Comments({ postId }: { postId: number }) {
         <div className="flex items-center gap-3 text-sm">
           {/* 대댓글에는 답글 달기 숨김 */}
           {!isChild && !isEditing && (
-            <button className="text-blue-600" onClick={() => setReplyFor(c.id)}>답글 달기</button>
+            <button className="text-blue-600" onClick={() => setReplyFor(c.id)}>Reply</button>
           )}
           {isOwner && !isEditing && (
             <>
-              <button className="text-gray-600" onClick={() => setEditingId(c.id)}>수정</button>
+              <button className="text-gray-600" onClick={() => setEditingId(c.id)}>Edit</button>
               <button
                 className="text-red-600"
                 onClick={async () => {
@@ -127,7 +127,7 @@ export default function Comments({ postId }: { postId: number }) {
                   if (!error) load(); else alert(error.message)
                 }}
               >
-                delete
+                Delete
               </button>
             </>
           )}
