@@ -67,7 +67,7 @@ export default function HomePage() {
               {p.title || '(Untitled)'}
             </Link>
             <div className="text-sm text-gray-500">
-              {new Date(p.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}
+              {new Date(p.created_at).toLocaleString()}
             </div>
           </li>
         ))}
