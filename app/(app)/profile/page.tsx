@@ -163,7 +163,7 @@ export default function ProfilePage() {
             <img
               src={profile.avatar_url}
               alt="avatar"
-              className="w-20 h-20 rounded-full object-cover"
+              className="max-w-[200px] h-auto" 
             />
           )}
           <p><strong>ID:</strong> {profile.display_name || 'Untitled'}</p>
