@@ -37,13 +37,13 @@ export default function PostDetailPage() {
 
   async function deletePost() {
     if (!post) return
-    if (!confirm('이 글을 삭제할까요?')) return
+    if (!confirm('Delete?')) return
     const { error } = await supabase.from('posts').delete().eq('id', post.id)
     if (!error) router.push('/home')
     else alert(error.message)
   }
 
-  if (!post) return <div className="p-6">불러오는 중…</div>
+  if (!post) return <div className="p-6">Loading…</div>
 
   const canEdit = me === post.user_id
 
@@ -54,8 +54,8 @@ export default function PostDetailPage() {
           <h1 className="text-2xl font-bold">{post.title}</h1>
           <div className="text-sm text-gray-500">{new Date(post.created_at).toLocaleString()}</div>
           <p className="text-sm text-gray-500">
-            작성자: <Link href={`/profile/${post.user_id}`} className="text-blue-600 hover:underline">
-              프로필 보기
+            Written by: <Link href={`/profile/${post.user_id}`} className="text-blue-600 hover:underline">
+              View Profile
             </Link>
           </p>
         </div>
@@ -65,13 +65,13 @@ export default function PostDetailPage() {
               onClick={() => router.push(`/post/${post.id}/edit`)}
               className="px-3 py-1 rounded border"
             >
-              수정
+              Edit
             </button>
             <button
               onClick={deletePost}
               className="px-3 py-1 rounded bg-red-600 text-white"
             >
-              삭제
+              Delete
             </button>
           </div>
         )}

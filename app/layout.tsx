@@ -2,7 +2,7 @@ import './globals.css'
 
 export const metadata = {
   title: 'Community',
-  description: '회원 전용 커뮤니티',
+  description: 'Hello',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

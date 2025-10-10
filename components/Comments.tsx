@@ -80,7 +80,7 @@ export default function Comments({ postId }: { postId: number }) {
     return (
       <li className={isChild ? 'pl-3 border-l space-y-2' : 'border rounded p-3 space-y-2'}>
         <div className="text-sm text-gray-500">
-          {c.profiles?.display_name || '익명'} · {new Date(c.created_at).toLocaleString()}
+          {c.profiles?.display_name || 'anonymity'} · {new Date(c.created_at).toLocaleString()}
         </div>
 
         {isEditing ? (
@@ -103,8 +103,8 @@ export default function Comments({ postId }: { postId: number }) {
               }}
             />
             <div className="space-x-2">
-              <button onClick={saveLocal} className="px-3 py-1 bg-blue-600 text-white rounded">저장</button>
-              <button onClick={() => setEditingId(null)} className="px-3 py-1 border rounded">취소</button>
+              <button onClick={saveLocal} className="px-3 py-1 bg-blue-600 text-white rounded">save</button>
+              <button onClick={() => setEditingId(null)} className="px-3 py-1 border rounded">cancel</button>
             </div>
           </div>
         ) : (
@@ -122,12 +122,12 @@ export default function Comments({ postId }: { postId: number }) {
               <button
                 className="text-red-600"
                 onClick={async () => {
-                  if (!confirm('이 댓글을 삭제할까요?')) return
+                  if (!confirm('Do you want to delete this comment?')) return
                   const { error } = await supabase.from('comments').delete().eq('id', c.id)
                   if (!error) load(); else alert(error.message)
                 }}
               >
-                삭제
+                delete
               </button>
             </>
           )}
@@ -146,12 +146,12 @@ export default function Comments({ postId }: { postId: number }) {
 
   return (
     <div className="mt-8">
-      <h2 className="font-semibold mb-2">댓글</h2>
+      <h2 className="font-semibold mb-2">Comments</h2>
 
       <div className="flex gap-2 mb-4">
         <input
           className="flex-1 border rounded p-2"
-          placeholder={replyFor ? '대댓글 입력...' : '댓글 입력...'}
+          placeholder={replyFor ? 'Enter reply...' : 'Enter comment...'}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={(e) => {
@@ -159,18 +159,18 @@ export default function Comments({ postId }: { postId: number }) {
           }}
         />
         <button onClick={() => submit(replyFor)} className="px-3 py-2 bg-gray-900 text-white rounded">
-          등록
+          go
         </button>
         {replyFor && (
           <button className="px-3 py-2 rounded border" onClick={() => setReplyFor(null)}>
-            취소
+            cancel
           </button>
         )}
       </div>
 
       <ul className="space-y-4">
         {tree.map((c: any) => <CommentNode key={c.id} c={c} />)}
-        {tree.length === 0 && <li className="text-gray-500">첫 댓글을 남겨보세요.</li>}
+        {tree.length === 0 && <li className="text-gray-500">Be the first comment.</li>}
       </ul>
     </div>
   )

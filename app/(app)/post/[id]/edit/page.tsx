@@ -38,11 +38,11 @@ export default function EditPostPage() {
     else router.push(`/post/${params.id}`)
   }
 
-  if (loading) return <div className="p-6">불러오는 중…</div>
+  if (loading) return <div className="p-6">Loading…</div>
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">글 수정</h1>
+      <h1 className="text-2xl font-bold mb-4">Edit Writing</h1>
       <form onSubmit={save} className="space-y-4">
         <input
           className="w-full border rounded p-2"
@@ -57,8 +57,8 @@ export default function EditPostPage() {
           required
         />
         <div className="space-x-2">
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">저장</button>
-          <button type="button" onClick={() => router.push(`/post/${params.id}`)} className="px-4 py-2 border rounded">취소</button>
+          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+          <button type="button" onClick={() => router.push(`/post/${params.id}`)} className="px-4 py-2 border rounded">Cancel</button>
         </div>
       </form>
     </div>

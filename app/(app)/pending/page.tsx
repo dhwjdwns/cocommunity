@@ -25,8 +25,8 @@ export default function PendingPage() {
   return (
     <div className="min-h-screen grid place-items-center">
       <div className="text-center">
-        <h1 className="text-2xl font-bold">관리자 승인 대기 중…</h1>
-        <p className="text-gray-500 mt-2">승인이 되면 자동으로 이동합니다.</p>
+        <h1 className="text-2xl font-bold">Waiting for administrator approval…</h1>
+        <p className="text-gray-500 mt-2">Once approved, you will be automatically moved.</p>
       </div>
     </div>
   )

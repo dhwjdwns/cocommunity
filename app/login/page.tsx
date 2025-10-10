@@ -27,29 +27,29 @@ export default function LoginPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
       <form onSubmit={onLogin} className="bg-white p-6 rounded-xl shadow-md w-80">
-        <h2 className="text-2xl font-semibold mb-4 text-center">로그인</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-center">Log in</h2>
         <input
           type="email"
-          placeholder="이메일"
+          placeholder="Email"
           className="w-full p-2 mb-2 border rounded"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
-          placeholder="비밀번호"
+          placeholder="Password"
           className="w-full p-2 mb-4 border rounded"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">
-          로그인
+          Log in
         </button>
         <button
           onClick={onSignup}
           className="w-full bg-gray-200 mt-2 py-2 rounded hover:bg-gray-300"
         >
-          회원가입
+          Sign up
         </button>
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
       </form>

@@ -64,14 +64,14 @@ export default function HomePage() {
         {posts.map(p => (
           <li key={p.id} className="py-3">
             <Link href={`/post/${p.id}`} className="text-lg font-semibold hover:underline">
-              {p.title || '(제목 없음)'}
+              {p.title || '(Untitled)'}
             </Link>
             <div className="text-sm text-gray-500">
               {new Date(p.created_at).toLocaleString()}
             </div>
           </li>
         ))}
-        {posts.length === 0 && <li className="py-8 text-gray-500">아직 글이 없습니다.</li>}
+        {posts.length === 0 && <li className="py-8 text-gray-500">There are no posts yet.</li>}
       </ul>
     </div>
   )

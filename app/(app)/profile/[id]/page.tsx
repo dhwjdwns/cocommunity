@@ -52,12 +52,12 @@ export default function OtherProfilePage() {
     })()
   }, [id, router])
 
-  if (loading) return <div className="p-8">불러오는 중...</div>
-  if (!profile) return <div className="p-8">프로필을 찾을 수 없습니다.</div>
+  if (loading) return <div className="p-8">Loading...</div>
+  if (!profile) return <div className="p-8">Profile not found.</div>
 
   return (
     <div className="max-w-2xl mx-auto p-8 space-y-6">
-      <h1 className="text-2xl font-bold">프로필</h1>
+      <h1 className="text-2xl font-bold">Profile</h1>
 
       <div className="space-y-2">
         {profile.avatar_url && (
@@ -67,14 +67,14 @@ export default function OtherProfilePage() {
             className="w-20 h-20 rounded-full object-cover"
           />
         )}
-        <p><strong>닉네임:</strong> {profile.display_name || '이름 없음'}</p>
-        <p><strong>가입일:</strong> {new Date(profile.created_at).toLocaleDateString()}</p>
+        <p><strong>ID:</strong> {profile.display_name || '이름 없음'}</p>
+        <p><strong>Register:</strong> {new Date(profile.created_at).toLocaleDateString()}</p>
       </div>
 
       <hr className="my-6" />
 
       <div>
-        <h2 className="text-xl font-semibold mb-3">작성한 글</h2>
+        <h2 className="text-xl font-semibold mb-3">Writings</h2>
         {posts.length > 0 ? (
           <ul className="list-disc pl-5 space-y-2">
             {posts.map(p => (
@@ -91,7 +91,7 @@ export default function OtherProfilePage() {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">작성한 글이 없습니다.</p>
+          <p className="text-gray-500">There are no posts written.</p>
         )}
       </div>
     </div>
