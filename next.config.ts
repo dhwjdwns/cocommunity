@@ -1,15 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   eslint: {
-    ignoreDuringBuilds: true,   // ESLint 에러 때문에 빌드 멈추지 않게
+    ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true,    // TS 타입 에러 때문에 빌드 멈추지 않게
+    ignoreBuildErrors: true,
   },
   images: {
-    remotePatterns: [{ protocol: 'https', hostname: '**' }], // 외부 이미지 허용(필요시)
+    remotePatterns: [{ protocol: 'https', hostname: '**' }],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
