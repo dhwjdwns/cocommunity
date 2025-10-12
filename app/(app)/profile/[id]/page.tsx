@@ -67,7 +67,7 @@ export default function OtherProfilePage() {
             className="w-20 h-20 rounded-full object-cover"
           />
         )}
-        <p><strong>ID:</strong> {profile.display_name || '이름 없음'}</p>
+        <p><strong>ID:</strong> {profile.display_name || 'No name'}</p>
         <p><strong>Register:</strong> {new Date(profile.created_at).toLocaleDateString()}</p>
       </div>
 

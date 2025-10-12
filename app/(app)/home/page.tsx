@@ -5,8 +5,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabaseClient'
 import Image from 'next/image'
 
-
-type Post = { id: number; title: string; created_at: string }
+type Post = { id: number; title: string; created_at: string; pinned_at: string | null }
 
 export default function HomePage() {
   const router = useRouter()
@@ -14,26 +13,29 @@ export default function HomePage() {
 
   useEffect(() => {
     (async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
       const user = session?.user
       if (!user) {
         router.push('/login')
         return
       }
-      
+
       const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .maybeSingle()
-      
+
       if (!error && profile && profile.status !== 'approved') {
         router.push('/pending')
       }
 
       const { data } = await supabase
         .from('posts')
-        .select('id,title,created_at')
+        .select('id,title,created_at,pinned_at')
+        .order('pinned_at', { ascending: true, nullsFirst: false })
         .order('created_at', { ascending: false })
       setPosts(data || [])
     })()
@@ -48,11 +50,11 @@ export default function HomePage() {
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex justify-between items-center mb-4">
         <Image
-          src="/images/logo_02.png"        // public 폴더 안의 파일 이름
-          alt="하나 그리고 다음 로고" // 대체 텍스트
-          width={3000}             // 이미지 가로 크기(px)
-          height={120}             // 세로 크기(px)
-          priority                // (선택) 첫 로딩 시 우선적으로 불러옴
+          src="/images/logo_02.png"
+          alt="하나 그리고 다음 로고"
+          width={3000}
+          height={120}
+          priority
         />
         <div className="space-x-3">
           {/* <Link href="/write" className="text-blue-600 hover:underline">글쓰기</Link>
@@ -61,17 +63,30 @@ export default function HomePage() {
       </div>
 
       <ul className="divide-y">
-        {posts.map(p => (
-          <li key={p.id} className="py-3">
-            <Link href={`/post/${p.id}`} className="text-lg font-semibold hover:underline">
-              {p.title || '(Untitled)'}
-            </Link>
-            <div className="text-sm text-gray-500">
-              {new Date(p.created_at).toLocaleString()}
+        {posts.map((p) => (
+          <li key={p.id} className="py-3 flex justify-between items-center">
+            <div>
+              <Link
+                href={`/post/${p.id}`}
+                className="text-lg font-semibold hover:underline"
+              >
+                {p.title || '(Untitled)'}
+              </Link>
+              <div className="text-sm text-gray-500">
+                {new Date(p.created_at).toLocaleString()}
+              </div>
             </div>
+
+            {/* ✅ 고정된 글이면 오른쪽에 연한 표시 */}
+            {p.pinned_at && (
+              <span className="text-sm text-gray-400 ml-3">PIN </span>
+            )}
           </li>
         ))}
-        {posts.length === 0 && <li className="py-8 text-gray-500">There are no posts yet.</li>}
+
+        {posts.length === 0 && (
+          <li className="py-8 text-gray-500">There are no posts yet.</li>
+        )}
       </ul>
     </div>
   )
