@@ -73,7 +73,7 @@ export default function HomePage() {
                 {p.title || '(Untitled)'}
               </Link>
               <div className="text-sm text-gray-500">
-                {new Date(p.created_at).toLocaleString()}
+                {new Date(new Date(p.created_at).getTime() + 9 * 60 * 60 * 1000).toLocaleString('en-US')}
               </div>
             </div>
 
