@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Image from 'next/image'
 import { supabase } from '@/lib/supabaseClient'
+import remarkBreaks from 'remark-breaks'
 
 type PostRow = { title: string; content: string; user_id: string }
 
@@ -148,9 +149,9 @@ export default function EditPostPage() {
             required
           />
         ) : (
-          <div className="prose max-w-none border rounded p-3">
+          <div className="max-w-none [&>p]:mb-3 [&>ul]:mb-3 [&>ol]:mb-3">
             <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
+              remarkPlugins={[remarkGfm, remarkBreaks]}
               components={{
                 img: (props) => {
                   const src = (props.src as string) || ''

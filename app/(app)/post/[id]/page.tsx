@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { supabase } from '@/lib/supabaseClient'
 import Comments from '@/components/Comments' // <-- add this
+import remarkBreaks from 'remark-breaks'
 
 type Post = {
   id: number
@@ -90,9 +91,9 @@ export default function PostDetailPage() {
         )}
       </div>
 
-      <div className="prose max-w-none">
+      <div className="max-w-none [&>p]:mb-3 [&>ul]:mb-3 [&>ol]:mb-3">
         <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
+          remarkPlugins={[remarkGfm, remarkBreaks]}
           components={{
             img: (props) => {
               const src = (props.src as string) || ''

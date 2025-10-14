@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabaseClient'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Image from 'next/image'
+import remarkBreaks from 'remark-breaks'
 
 export default function WritePage() {
   const router = useRouter()
@@ -142,9 +143,9 @@ export default function WritePage() {
             required
           />
         ) : (
-          <div className="prose max-w-none border rounded p-3">
+          <div className="max-w-none [&>p]:mb-3 [&>ul]:mb-3 [&>ol]:mb-3">
             <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
+              remarkPlugins={[remarkGfm, remarkBreaks]}
               components={{
                 img: (props) => {
                   const src = (props.src as string) || '' // <-- fix red underline
