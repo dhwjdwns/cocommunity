@@ -1,10 +1,13 @@
 'use client'
-import { useEffect, useState } from 'react'
+
+import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
-import { useParams, useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabaseClient'
-import Comments from '@/components/Comments'
 import Link from 'next/link'
+import { useParams, useRouter } from 'next/navigation'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { supabase } from '@/lib/supabaseClient'
+import Comments from '@/components/Comments' // <-- add this
 
 type Post = {
   id: number
@@ -22,16 +25,24 @@ export default function PostDetailPage() {
   const [me, setMe] = useState<string | null>(null)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return router.push('/login')
+      if (!session) { router.push('/login'); return }
       const { data: profile } = await supabase
-        .from('profiles').select('status').eq('id', session.user.id).single()
-      if (profile?.status !== 'approved') return router.push('/pending')
+        .from('profiles')
+        .select('status')
+        .eq('id', session.user.id)
+        .single()
+      if (profile?.status !== 'approved') { router.push('/pending'); return }
       setMe(session.user.id)
 
-      const { data } = await supabase.from('posts').select('*').eq('id', Number(params.id)).single()
-      setPost(data as any)
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('id', Number(params.id))
+        .single()
+      if (error) { router.push('/home'); return }
+      setPost(data as Post)
     })()
   }, [params.id, router])
 
@@ -39,69 +50,73 @@ export default function PostDetailPage() {
     if (!post) return
     if (!confirm('Delete?')) return
     const { error } = await supabase.from('posts').delete().eq('id', post.id)
-    if (!error) router.push('/home')
-    else alert(error.message)
+    if (error) { alert(error.message); return }
+    router.push('/home')
   }
+
+  const hasMarkdownImage = useMemo(() => {
+    if (!post?.content) return false
+    return /!\[.*?\]\(.*?\)/.test(post.content)
+  }, [post?.content])
 
   if (!post) return <div className="p-6">Loading…</div>
 
   const canEdit = me === post.user_id
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-4">
+    <div className="max-w-2xl mx-auto p-6 space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{post.title}</h1>
-          <div className="text-sm text-gray-500">{new Date(post.created_at).toLocaleString()}</div>
+          <div className="text-sm text-gray-500">
+            {new Date(post.created_at).toLocaleString()}
+          </div>
           <p className="text-sm text-gray-500">
-            Written by: <Link href={`/profile/${post.user_id}`} className="text-blue-600 hover:underline">
+            Written by:{' '}
+            <Link href={`/profile/${post.user_id}`} className="text-blue-600 hover:underline">
               View Profile
             </Link>
           </p>
         </div>
         {canEdit && (
           <div className="shrink-0 space-x-2">
-            <button
-              onClick={() => router.push(`/post/${post.id}/edit`)}
-              className="px-3 py-1 rounded border"
-            >
+            <button onClick={() => router.push(`/post/${post.id}/edit`)} className="px-3 py-1 rounded border">
               Edit
             </button>
-            <button
-              onClick={deletePost}
-              className="px-3 py-1 rounded bg-red-600 text-white"
-            >
+            <button onClick={deletePost} className="px-3 py-1 rounded bg-red-600 text-white">
               Delete
             </button>
           </div>
         )}
       </div>
-      {post.image_url && (
+
+      <div className="prose max-w-none">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            img: (props) => {
+              const src = (props.src as string) || ''
+              const alt = props.alt || ''
+              return (
+                <span className="block relative">
+                  <Image src={src} alt={alt} width={1200} height={900} className="rounded" unoptimized />
+                </span>
+              )
+            },
+          }}
+        >
+          {post.content}
+        </ReactMarkdown>
+      </div>
+
+      {!hasMarkdownImage && post.image_url && (
         <div className="relative w-full h-64">
-          {/* 외부 URL이므로 next/image width/height 지정 대신 fill 사용 + unoptimized */}
           <Image src={post.image_url} alt="post image" fill className="object-contain" unoptimized />
         </div>
       )}
-      <div className="whitespace-pre-wrap">{post.content}</div>
-      {/* ... */}
-      <Comments postId={post.id} />
+
+      {/* render comments here */}
+      <Comments postId={post.id} /> {/* <-- un-comment and keep this */}
     </div>
   )
-  // return (
-  //   <div className="max-w-2xl mx-auto p-6 space-y-4">
-      
-  //     <h1 className="text-2xl font-bold">{post.title}</h1>
-  //     <div className="text-sm text-gray-500">{new Date(post.created_at).toLocaleString()}</div>
-      // {post.image_url && (
-      //   <div className="relative w-full h-64">
-      //     {/* 외부 URL이므로 next/image width/height 지정 대신 fill 사용 + unoptimized */}
-      //     <Image src={post.image_url} alt="post image" fill className="object-contain" unoptimized />
-      //   </div>
-      // )}
-  //     <div className="whitespace-pre-wrap">{post.content}</div>
-
-  //     {/* 댓글 컴포넌트 */}
-  //     <Comments postId={post.id} />
-  //   </div>
-  // )
 }
