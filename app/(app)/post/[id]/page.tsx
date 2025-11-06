@@ -70,7 +70,7 @@ export default function PostDetailPage() {
         <div>
           <h1 className="text-2xl font-bold">{post.title}</h1>
           <div className="text-sm text-gray-500">
-            {new Date(post.created_at).toLocaleString()}
+            {new Date(new Date(post.created_at).getTime() + 9 * 60 * 60 * 1000).toLocaleString('en-US')}
           </div>
           <p className="text-sm text-gray-500">
             Written by:{' '}
