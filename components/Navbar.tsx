@@ -63,7 +63,7 @@ export default function NavBar() {
   }
 
   return (
-    <nav className="bg-white sticky top-0 z-20">
+    <nav className="bg-transparent sticky top-0 z-20">
       <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* 로고 */}
         <Link href="/home" className="text-lg font-bold text-blue-600 hover:text-blue-800">
