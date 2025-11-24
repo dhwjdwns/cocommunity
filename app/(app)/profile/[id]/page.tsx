@@ -65,7 +65,8 @@ export default function OtherProfilePage() {
           <img
             src={profile.avatar_url}
             alt="avatar"
-            className="w-20 h-20 rounded-full object-cover"
+            // className=""
+            style={{ width: '50%', height: 'auto' }}
           />
         )}
         <p><strong>ID:</strong> {profile.display_name || 'No name'}</p>
