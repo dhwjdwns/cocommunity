@@ -9,6 +9,7 @@ type PublicProfile = {
   display_name: string | null
   avatar_url: string | null
   created_at: string
+  bio: string | null
 }
 
 type Post = { id: number; title: string; created_at: string }
@@ -69,6 +70,20 @@ export default function OtherProfilePage() {
         )}
         <p><strong>ID:</strong> {profile.display_name || 'No name'}</p>
         <p><strong>Register:</strong> {new Date(profile.created_at).toLocaleDateString()}</p>
+
+        {/* 🔹 프로필 설명 */}
+        <div className="mt-2">
+          <p className="text-base font-semibold">Introduction</p>
+          {profile.bio ? (
+            <p className="text-base text-gray-700 whitespace-pre-line">
+          {profile.bio}
+            </p>
+          ) : (
+            <p className="text-base text-gray-400">
+              There is no introduction.
+            </p>
+          )}
+        </div>
       </div>
 
       <hr className="my-6" />
