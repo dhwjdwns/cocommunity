@@ -50,7 +50,7 @@ export default function HomePage() {
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex justify-between items-center mb-4">
         <Image
-          src="/images/logo_02_1.png"
+          src="/images/logo_02_2.png"
           alt="하나 그리고 다음 로고"
           width={3000}
           height={120}
