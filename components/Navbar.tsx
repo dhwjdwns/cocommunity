@@ -18,7 +18,7 @@ export default function NavBar() {
       const { data } = await supabase.auth.getSession()
       if (mounted) setUserId(data.session?.user?.id)
     })()
-
+    
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
       setUserId(session?.user?.id)
