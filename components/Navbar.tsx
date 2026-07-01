@@ -63,47 +63,68 @@ export default function NavBar() {
   }
 
   return (
-    <nav className="bg-white sticky top-0 z-20">
+    <nav className="bg-white dark:bg-[#0A0A0A] sticky top-0 z-20">
       <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* 로고 */}
         <Link href="/home" className="text-lg font-bold text-blue-600 hover:text-blue-800">
           <Image
-            src="/images/logo_01.png"
+            src="/images/home_v3.png"
             alt="하나 그리고 다음 로고"
             width={250}
             height={120}
             priority
+            className="block dark:hidden"
+          />
+          <Image
+            src="/images/home_v3_white.png"
+            alt="하나 그리고 다음 로고"
+            width={250}
+            height={120}
+            priority
+            className="hidden dark:block"
           />
         </Link>
 
-        
+        {/* 글쓰기 버튼 */}
+        <Link href="/write">
+          <Image
+            src="/images/write_v3.png"
+            alt="글쓰기 버튼"
+            width={200}
+            height={40}
+            className="block dark:hidden hover:opacity-80 transition-opacity duration-200"
+          />
+          <Image
+            src="/images/write_v3_white.png"
+            alt="글쓰기 버튼"
+            width={200}
+            height={40}
+            className="hidden dark:block hover:opacity-80 transition-opacity duration-200"
+          />
+        </Link>
 
-          {/* 글쓰기 버튼 */}
-          <Link href="/write">
-            <Image
-              src="/images/logo_03.png"
-              alt="글쓰기 버튼"
-              width={200}
-              height={40}
-              className="hover:opacity-80 transition-opacity duration-200"
-            />
-          </Link>
-
-          {/* 버튼 영역 */}
+        {/* 버튼 영역 */}
         <div className="flex items-center space-x-3 relative">
           {/* 🔔 알림 벨 */}
           <div className="relative">
             <button
               onClick={toggle}
-              className="relative rounded-full p-2 hover:bg-gray-100"
+              className="relative rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
               aria-label="알림"
             >
               <Image
-                src="/images/notifi_button.png" // 🔔 대신 네가 그린 그림 경로
+                src="/images/notification_v3.png"
                 alt="알림 아이콘"
-                width={55} // 사이즈 조정 가능
+                width={55}
                 height={28}
-                className="hover:opacity-80 transition-opacity duration-200"
+                className="block dark:hidden hover:opacity-80 transition-opacity duration-200"
+              />
+              <Image
+                src="/images/notification_v3_white.png"
+                alt="알림 아이콘"
+                width={55}
+                height={28}
+                className="hidden dark:block hover:opacity-80 transition-opacity duration-200"
               />
               {unread > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 text-xs bg-red-500 text-white rounded-full px-1">
@@ -115,11 +136,11 @@ export default function NavBar() {
             {/* 드롭다운 */}
             {open && (
               <div
-                className="absolute right-0 mt-2 w-80 rounded-2xl shadow-lg bg-white border z-30"
+                className="absolute right-0 mt-2 w-80 rounded-2xl shadow-lg bg-white dark:bg-[#0A0A0A] border dark:border-gray-700 z-30"
                 onMouseLeave={close}
               >
                 <div className="flex items-center justify-between px-3 py-2">
-                  <span className="font-medium">Notification</span>
+                  <span className="font-medium dark:text-white">Notification</span>
                   <button
                     onClick={clearAllLocal}
                     className="text-sm text-blue-600 hover:underline"
@@ -128,22 +149,22 @@ export default function NavBar() {
                   </button>
                 </div>
 
-                <ul className="max-h-96 overflow-auto divide-y">
+                <ul className="max-h-96 overflow-auto divide-y dark:divide-gray-700">
                   {(items?.length ?? 0) === 0 && (
-                    <li className="p-3 text-sm text-gray-500">No Notification</li>
+                    <li className="p-3 text-sm text-gray-500 dark:text-gray-400">No Notification</li>
                   )}
                   {items?.map(n => (
                     <li key={n.id} className="p-0">
                       <Link
                         href={n.link ?? '#'}
-                        className="block p-3 hover:bg-gray-50"
+                        className="block p-3 hover:bg-gray-50 dark:hover:bg-gray-800"
                         onClick={async (e) => {
                           e.preventDefault()
                           await go(n)
                         }}
                       >
                         <div className="min-w-0">
-                          <div className="text-sm font-medium truncate">
+                          <div className="text-sm font-medium truncate dark:text-white">
                             {getMessage(n)}
                           </div>
                         </div>
@@ -158,11 +179,18 @@ export default function NavBar() {
           {/* 로그아웃 버튼 */}
           <button onClick={logout}>
             <Image
-              src="/images/Leave_button.png"
+              src="/images/leave_v3.png"
               alt="로그아웃 버튼"
               width={160}
               height={40}
-              className="hover:opacity-80 transition-opacity duration-200"
+              className="block dark:hidden hover:opacity-80 transition-opacity duration-200"
+            />
+            <Image
+              src="/images/leave_v3_white.png"
+              alt="로그아웃 버튼"
+              width={160}
+              height={40}
+              className="hidden dark:block hover:opacity-80 transition-opacity duration-200"
             />
           </button>
         </div>

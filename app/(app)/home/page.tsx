@@ -62,14 +62,23 @@ export default function HomePage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-2xl mx-auto p-6 dark:bg-[#0A0A0A] dark:text-white">
       <div className="flex justify-between items-center mb-4">
         <Image
-          src="/images/logo_02_2.png"
+          src="/images/banner_v3.png"
           alt="하나 그리고 다음 로고"
           width={3000}
           height={120}
           priority
+          className="block dark:hidden"
+        />
+        <Image
+          src="/images/banner_v3_white.png"
+          alt="하나 그리고 다음 로고"
+          width={3000}
+          height={120}
+          priority
+          className="hidden dark:block"
         />
         <div className="space-x-3">
         </div>
@@ -77,18 +86,17 @@ export default function HomePage() {
 
       {/* 고정된 글 섹션  */}
       {pinnedPosts.length > 0 && (
-        <ul className="divide-y mb-8">
+        <ul className="divide-y dark:divide-gray-700 mb-8">
           {pinnedPosts.map((p) => (
             <li key={p.id} className="py-3 flex justify-between items-center">
               <div>
                 <Link href={`/post/${p.id}`} className="text-lg font-semibold hover:underline">
                   {p.title || '(Untitled)'}
                 </Link>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(new Date(p.created_at).getTime() + 9 * 60 * 60 * 1000).toLocaleString('en-US')}
                 </div>
               </div>
-              {/* <span className="text-sm text-gray-400 ml-3">PIN </span> */}
             </li>
           ))}
         </ul>
@@ -98,19 +106,19 @@ export default function HomePage() {
       {years.map((year) => (
         <div key={year} className="mt-8">
           <div className="flex items-center mb-2">
-            <span className="text-2xl font-bold text-gray-800 pr-4 whitespace-nowrap">
+            <span className="text-2xl font-bold text-gray-800 dark:text-white pr-4 whitespace-nowrap">
               {year}
             </span>
-            <div className="flex-grow border-t border-gray-200"></div>
+            <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
           </div>
-          <ul className="divide-y">
+          <ul className="divide-y dark:divide-gray-700">
             {groupedPosts[year].map((p) => (
               <li key={p.id} className="py-3 flex justify-between items-center">
                 <div>
                   <Link href={`/post/${p.id}`} className="text-lg font-semibold hover:underline">
                     {p.title || '(Untitled)'}
                   </Link>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
                     {new Date(new Date(p.created_at).getTime() + 9 * 60 * 60 * 1000).toLocaleString('en-US')}
                   </div>
                 </div>
@@ -121,8 +129,8 @@ export default function HomePage() {
       ))}
 
       {posts.length === 0 && (
-        <ul className="divide-y">
-          <li className="py-8 text-gray-500">There are no posts yet.</li>
+        <ul className="divide-y dark:divide-gray-700">
+          <li className="py-8 text-gray-500 dark:text-gray-400">There are no posts yet.</li>
         </ul>
       )}
     </div>
