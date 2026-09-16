@@ -1,15 +1,18 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { supabase } from '@/lib/supabaseClient'
 import Image from 'next/image'
+import PostListItem from '@/components/PostListItem'
 
 type Post = { id: number; title: string; created_at: string; pinned_at: string | null }
 
 export default function HomePage() {
   const router = useRouter()
   const [posts, setPosts] = useState<Post[]>([])
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [colors, setColors] = useState<Record<number, string>>({})
+  const [colorError, setColorError] = useState('')
 
   useEffect(() => {
     (async () => {
@@ -30,7 +33,9 @@ export default function HomePage() {
 
       if (!error && profile && profile.status !== 'approved') {
         router.push('/pending')
+        return
       }
+      setIsAdmin(!error && profile?.is_admin === true)
 
       const { data } = await supabase
         .from('posts')
@@ -38,6 +43,14 @@ export default function HomePage() {
         .order('pinned_at', { ascending: true, nullsFirst: false })
         .order('created_at', { ascending: false })
       setPosts(data || [])
+      const { data: colorRows, error: colorLoadError } = await supabase
+        .from('post_backgrounds')
+        .select('post_id,color')
+      if (colorLoadError) {
+        setColorError('배경색을 불러오지 못했습니다. 데이터베이스 설정과 연결을 확인해 주세요.')
+      } else {
+        setColors(Object.fromEntries((colorRows || []).map(row => [row.post_id, row.color])))
+      }
     })()
   }, [router])
 
@@ -56,10 +69,6 @@ export default function HomePage() {
   const years = Object.keys(groupedPosts).map(Number).sort((a, b) => b - a)
   // ------------------------------------------------
 
-  async function logout() {
-    await supabase.auth.signOut()
-    router.push('/')
-  }
 
   return (
     <div className="max-w-2xl mx-auto p-6 dark:bg-[#0A0A0A] dark:text-white">
@@ -84,20 +93,19 @@ export default function HomePage() {
         </div>
       </div>
 
+      {isAdmin && colorError && <p role="alert" className="text-sm text-red-600 dark:text-red-400">{colorError}</p>}
+
       {/* 고정된 글 섹션  */}
       {pinnedPosts.length > 0 && (
         <ul className="divide-y dark:divide-gray-700 mb-8">
           {pinnedPosts.map((p) => (
-            <li key={p.id} className="py-3 flex justify-between items-center">
-              <div>
-                <Link href={`/post/${p.id}`} className="text-lg font-semibold hover:underline">
-                  {p.title || '(Untitled)'}
-                </Link>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {new Date(new Date(p.created_at).getTime() + 9 * 60 * 60 * 1000).toLocaleString('en-US')}
-                </div>
-              </div>
-            </li>
+            <PostListItem
+              key={p.id}
+              post={p}
+              color={colors[p.id] || ''}
+              canEditColor={isAdmin && !colorError}
+              onColorSaved={(color) => setColors(current => ({ ...current, [p.id]: color }))}
+            />
           ))}
         </ul>
       )}
@@ -113,16 +121,13 @@ export default function HomePage() {
           </div>
           <ul className="divide-y dark:divide-gray-700">
             {groupedPosts[year].map((p) => (
-              <li key={p.id} className="py-3 flex justify-between items-center">
-                <div>
-                  <Link href={`/post/${p.id}`} className="text-lg font-semibold hover:underline">
-                    {p.title || '(Untitled)'}
-                  </Link>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {new Date(new Date(p.created_at).getTime() + 9 * 60 * 60 * 1000).toLocaleString('en-US')}
-                  </div>
-                </div>
-              </li>
+              <PostListItem
+                key={p.id}
+                post={p}
+                color={colors[p.id] || ''}
+                canEditColor={isAdmin && !colorError}
+                onColorSaved={(color) => setColors(current => ({ ...current, [p.id]: color }))}
+              />
             ))}
           </ul>
         </div>
