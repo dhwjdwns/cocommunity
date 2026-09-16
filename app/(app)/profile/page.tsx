@@ -190,7 +190,7 @@ export default function ProfilePage() {
               <li
                 key={post.id}
                 className="cursor-pointer text-blue-600 hover:underline"
-                onClick={() => router.push(`/posts/${post.id}`)}
+                onClick={() => router.push(`/post/${post.id}`)}
               >
                 {post.title}
                 <span className="text-gray-500 text-sm ml-2">
